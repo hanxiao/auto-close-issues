@@ -40,16 +40,21 @@ const getIssueCloseMessage = () => {
       "utf-8"
     );
     const templateTitles = Object.keys(mdjson(templateMarkdown));
+    console.log(templateTitles);
 
     return templateTitles.every(title => issueBodyTitles.includes(title));
   });
 
   const { issue } = github.context;
   const closedIssueLabel = core.getInput("closed-issues-label");
+  
+  console.log(closedIssueLabel)
+  console.log(issue)
 
   if (doesIssueMatchAnyTemplate || payload.action !== "opened") {
     // Only reopen the issue if there's a `closed-issues-label` so it knows that
     // it was previously closed because of the wrong template
+    console.log("h1");
     if (payload.issue.state === "closed" && closedIssueLabel) {
       const labels = (
         await client.issues.listLabelsOnIssue({
@@ -85,6 +90,7 @@ const getIssueCloseMessage = () => {
 
   // If an closed issue label was provided, add it to the issue
   if (closedIssueLabel) {
+    console.log("h2");
     await client.issues.addLabels({
       owner: issue.owner,
       repo: issue.repo,
